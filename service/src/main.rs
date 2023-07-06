@@ -8,9 +8,6 @@ use tokio::join;
 extern crate dotenv;
 
 #[macro_use]
-extern crate dotenv_codegen;
-
-#[macro_use]
 extern crate rocket;
 
 mod database;
@@ -20,6 +17,7 @@ mod service;
 
 // TODO: server security, unauthorized access might be dangerous
 // TODO: custom default port
+// TODO: make config from env variables, throw error at start if there are some missing
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     dotenv().ok();

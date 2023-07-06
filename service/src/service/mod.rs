@@ -62,6 +62,7 @@ impl Service {
         }
     }
 
+    // TODO: make iteration in loop with cx.recv() OR timeout, to track time in current window not only when its changed
     pub async fn spin_loop(&mut self) {
         while let Some(event) = self.cx.recv().await {
             if event.is_none() {

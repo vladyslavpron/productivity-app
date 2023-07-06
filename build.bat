@@ -14,4 +14,4 @@ cargo build --release
 cd ..
 copy ".\service\target\release\service.exe" ".\dist\service\"
 
-copy "prod.env" ".\dist\service\"
+copy "start.bat" ".\dist\"

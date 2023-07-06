@@ -16,26 +16,12 @@ use sea_orm::{
 
 extern crate rocket;
 
-static STATIC_FILES_DEV_FOLDER: &str = "../app/build/static/";
-static STATIC_FILES_PROD_FOLDER: &str = "../static/";
-
 // TODO: sanitize dangerous characters
 #[get("/<path>")]
 pub async fn serve_files(path: PathBuf) -> Result<NamedFile, std::io::Error> {
-    let rust_env = dotenv!("RUST_ENV");
-    let is_prod = rust_env == "PRODUCTION";
+    let static_folder = std::env::var("STATIC_FOLDER").unwrap();
 
-    info!("RUST_ENV: {}", rust_env);
-
-    let folder = if is_prod {
-        STATIC_FILES_PROD_FOLDER
-    } else {
-        STATIC_FILES_DEV_FOLDER
-    };
-
-    info!("FOLDER: {}", &folder);
-
-    let file = NamedFile::open(Path::new(folder).join(path)).await;
+    let file = NamedFile::open(Path::new(&static_folder).join(path)).await;
     info!("FILE!! {:?}", file);
     file
 }
