@@ -1,15 +1,5 @@
 import { createTheme, ThemeProvider, Paper, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  LineChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Line,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import TimeSpentBarChart from "./TimeSpentBarChart";
 
 const theme = createTheme({
@@ -31,7 +21,6 @@ function App() {
   }
 
   const [events, setEvents] = useState<Event[]>([]);
-
   const titles = events.map((event) => event.title);
 
   useEffect(() => {
@@ -47,8 +36,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ width: "100vh", height: "100vh" }}>
-        <Button variant="contained">Contained</Button>
-        Hello wrodl11231!
         <TimeSpentBarChart />
       </Paper>
     </ThemeProvider>
