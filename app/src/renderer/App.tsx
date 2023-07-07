@@ -1,6 +1,9 @@
 import { createTheme, ThemeProvider, Paper, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import TimeSpentBarChart from "./TimeSpentBarChart";
+import TimeSpentBarChart from "./components/TimeSpentBarChart";
+import { RootState } from "./store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { SessionStats, set } from "./store/currentSessionSlice";
 
 const theme = createTheme({
   palette: {
@@ -20,15 +23,28 @@ function App() {
     setEvents(events);
   }
 
+  async function fetchCurrentSessionStats() {
+    const response = await fetch(
+      "http://localhost:8000/api/session/current/statistics"
+    );
+
+    const sessionStats = (await response.json()) as SessionStats;
+
+    dispatch(set(sessionStats));
+  }
+
+  const currentSession = useSelector(
+    (state: RootState) => state.currentSession
+  );
+  const dispatch = useDispatch();
+
   const [events, setEvents] = useState<Event[]>([]);
-  const titles = events.map((event) => event.title);
 
   useEffect(() => {
     fetchEvents();
+    fetchCurrentSessionStats();
   }, []);
-  // TODO: Current session charts, make API endpoint with stats for session
 
-  // TODO: Store
   // TODO: Layout
   // TODO: refactoring
 

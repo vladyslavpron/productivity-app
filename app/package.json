@@ -46,12 +46,14 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.13.6",
+    "@reduxjs/toolkit": "^1.9.5",
     "@types/recharts": "^1.8.24",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
     "path-browserify": "^1.0.1",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.1.1",
     "recharts": "^2.7.2"
   }
 }

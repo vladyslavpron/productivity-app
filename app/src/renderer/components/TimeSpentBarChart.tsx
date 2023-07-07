@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import { Root } from "react-dom/client";
 import {
   Cell,
   BarChart,
@@ -9,6 +10,10 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import { RootState } from "../store/store";
+
+import { useSelector, useDispatch } from "react-redux";
+import { SessionStats } from "../store/currentSessionSlice";
 
 const colors = [
   "#ea5545",
@@ -25,14 +30,14 @@ const colors = [
 const FULL_DISPLAY_STATS_COUNT = 5;
 
 function TimeSpentBarChart() {
-  async function fetchCurrentSessionStats() {
-    const response = await fetch(
-      "http://localhost:8000/api/session/current/statistics"
-    );
+  const currentSession = useSelector(
+    (state: RootState) => state.currentSession
+  );
 
-    const sessionStats = (await response.json()) as SessionStats;
-
-    const data = sessionStats.time_spent.map(([key, val]) => ({
+  const mapSessionTimeSpentData = (
+    timeSpent: SessionStats["time_spent"]
+  ): SessionTimeSpendMaped[] => {
+    const data = timeSpent.map(([key, val]) => ({
       name: key,
       "time spent": val,
     }));
@@ -52,28 +57,14 @@ function TimeSpentBarChart() {
 
     chartData.push({ name: "others", ["time spent"]: count });
 
-    setSessionStats(sessionStats);
-    setData(data);
-    setChartData(chartData);
-  }
-
-  const [sessionStats, setSessionStats] = useState<SessionStats>();
-
-  const [data, setData] =
-    useState<{ name: string; ["time spent"]: number }[]>();
-  const [chartData, setChartData] = useState<
-    { name: string; ["time spent"]: number }[]
-  >([]);
-
-  useEffect(() => {
-    fetchCurrentSessionStats();
-  }, []);
+    return chartData;
+  };
 
   // TODO: better time formatting (not ms but let's sey hours and fractions of hours)
   // TODO: render each entry as separate <Bar> to have good legend?
   // TODO: add small color block in <XAxis>??
+  const chartData = mapSessionTimeSpentData(currentSession.time_spent);
 
-  console.log(chartData);
   return (
     <Box width="100%" height="100%" margin="50px">
       <BarChart
@@ -96,14 +87,9 @@ function TimeSpentBarChart() {
   );
 }
 
-interface SessionStats {
-  session: Session;
-  time_spent: [string, number][];
-}
-
-interface Session {
-  id: number;
-  datetime: string;
+interface SessionTimeSpendMaped {
+  name: string;
+  "time spent": number;
 }
 
 export default TimeSpentBarChart;
