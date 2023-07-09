@@ -35,7 +35,7 @@ function TimeSpentBarChart() {
   );
 
   const mapSessionTimeSpentData = (
-    timeSpent: SessionStats["time_spent"]
+    timeSpent: SessionStats["time_per_app"]
   ): SessionTimeSpendMaped[] => {
     const data = timeSpent.map(([key, val]) => ({
       name: key,
@@ -63,7 +63,7 @@ function TimeSpentBarChart() {
   // TODO: better time formatting (not ms but let's sey hours and fractions of hours)
   // TODO: render each entry as separate <Bar> to have good legend?
   // TODO: add small color block in <XAxis>??
-  const chartData = mapSessionTimeSpentData(currentSession.time_spent);
+  const chartData = mapSessionTimeSpentData(currentSession.timePerApp);
 
   return (
     <Box width="100%" height="100%" margin="50px">

@@ -1,4 +1,11 @@
-import { createTheme, ThemeProvider, Paper, Button, Box } from "@mui/material";
+import {
+  createTheme,
+  ThemeProvider,
+  Paper,
+  Button,
+  Box,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TimeSpentBarChart from "./components/TimeSpentBarChart";
 import { RootState } from "./store/store";
@@ -56,11 +63,25 @@ function App() {
     <ThemeProvider theme={theme}>
       <Paper sx={{ width: "100vh", height: "100vh" }}>
         <Navbar />
-        <Box>Total app switches today: {events.length}</Box>
-        <Box>
-          Total applications used today: {currentSession.time_spent.length}
-        </Box>
-        <TimeSpentBarChart />
+        {currentSession.totalTimeInApps && (
+          <>
+            <Box>
+              <Typography>Total app switches today: {events.length}</Typography>
+              <Typography>
+                Total applications used today:{" "}
+                {currentSession.timePerApp.length}
+              </Typography>
+              <Typography>
+                Average consecutive time in application:
+                {currentSession.avgTimeInApp}
+              </Typography>
+              <Typography>
+                Total time in application: {currentSession.totalTimeInApps}
+              </Typography>
+            </Box>
+            <TimeSpentBarChart />
+          </>
+        )}
       </Paper>
     </ThemeProvider>
   );

@@ -3,7 +3,7 @@ import React from "react";
 
 function Navbar() {
   return (
-    <AppBar>
+    <AppBar position="static">
       <Toolbar>
         <MenuItem href="/">
           <Typography>Home</Typography>

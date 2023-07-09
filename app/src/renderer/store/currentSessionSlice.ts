@@ -3,12 +3,16 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface CurrentSessionState {
   session: Session | null;
-  time_spent: [string, number][];
+  timePerApp: [string, number][];
+  avgTimeInApp: number;
+  totalTimeInApps: number;
 }
 
 const initialState: CurrentSessionState = {
   session: null,
-  time_spent: [],
+  timePerApp: [],
+  avgTimeInApp: 0,
+  totalTimeInApps: 0,
 };
 
 export const currentSessionSlice = createSlice({
@@ -17,7 +21,9 @@ export const currentSessionSlice = createSlice({
   reducers: {
     set: (state, action: PayloadAction<SessionStats>) => {
       state.session = action.payload.session;
-      state.time_spent = action.payload.time_spent;
+      state.timePerApp = action.payload.time_per_app;
+      state.avgTimeInApp = action.payload.avg_time_in_app;
+      state.totalTimeInApps = action.payload.total_time_in_apps;
     },
   },
 });
@@ -33,5 +39,7 @@ export interface Session {
 
 export interface SessionStats {
   session: Session;
-  time_spent: [string, number][];
+  time_per_app: [string, number][];
+  avg_time_in_app: number;
+  total_time_in_apps: number;
 }
