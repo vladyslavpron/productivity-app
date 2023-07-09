@@ -79,6 +79,7 @@ impl Service {
 
             let processed_event = processed_event.unwrap();
 
+            // TODO: application might not have "Product name" in its metadata, in this case it's better to use executable name
             let record = event::ActiveModel {
                 path: Set(processed_event.path),
                 title: Set(processed_event.window_title.clone()),

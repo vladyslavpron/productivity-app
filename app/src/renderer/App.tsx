@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, Paper, Button } from "@mui/material";
+import { createTheme, ThemeProvider, Paper, Button, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TimeSpentBarChart from "./components/TimeSpentBarChart";
 import { RootState } from "./store/store";
@@ -48,10 +48,15 @@ function App() {
   // TODO: Layout
   // TODO: refactoring
 
-  //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts
+  //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
+  // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ width: "100vh", height: "100vh" }}>
+        <Box>Total app switches today: {events.length}</Box>
+        <Box>
+          Total applications used today: {currentSession.time_spent.length}
+        </Box>
         <TimeSpentBarChart />
       </Paper>
     </ThemeProvider>
