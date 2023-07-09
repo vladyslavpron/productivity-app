@@ -4,6 +4,7 @@ import TimeSpentBarChart from "./components/TimeSpentBarChart";
 import { RootState } from "./store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { SessionStats, set } from "./store/currentSessionSlice";
+import Navbar from "./components/Navbar";
 
 const theme = createTheme({
   palette: {
@@ -50,9 +51,11 @@ function App() {
 
   //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
   // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
+  // TODO: list/table of events with all events, but implement virtual scroll for performance since sometimes there are a lot of em
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ width: "100vh", height: "100vh" }}>
+        <Navbar />
         <Box>Total app switches today: {events.length}</Box>
         <Box>
           Total applications used today: {currentSession.time_spent.length}
