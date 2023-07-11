@@ -5,7 +5,7 @@ use tokio::sync::mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender};
 
 use crate::entity::*;
 
-use std::thread::JoinHandle;
+use std::{path::Path, thread::JoinHandle};
 
 mod windows_service;
 
@@ -111,7 +111,13 @@ impl Service {
         let process_handle = WindowsService::get_process_handle(pid)?;
         let path = WindowsService::get_process_executable_path(process_handle)?;
 
-        let app_title = WindowsService::get_app_title(path.clone())?;
+        let app_title = match WindowsService::get_app_title(path.clone()) {
+            Ok(title) => title,
+            Err(_) => {
+                let path = Path::new(&path);
+                String::from(path.file_name().unwrap().to_str().unwrap())
+            }
+        };
 
         Ok(ProcessedWindowEvent {
             window_title,
