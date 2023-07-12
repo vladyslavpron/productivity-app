@@ -1,6 +1,4 @@
-import { Box } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import { Root } from "react-dom/client";
+import React from "react";
 import {
   Cell,
   BarChart,
@@ -9,10 +7,12 @@ import {
   CartesianGrid,
   YAxis,
   Tooltip,
+  ResponsiveContainer,
+  Label,
 } from "recharts";
 import { RootState } from "../store/store";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { SessionStats } from "../store/currentSessionSlice";
 
 const colors = [
@@ -63,27 +63,33 @@ function TimeSpentBarChart() {
   // TODO: better time formatting (not ms but let's sey hours and fractions of hours)
   // TODO: render each entry as separate <Bar> to have good legend?
   // TODO: add small color block in <XAxis>??
+  // TODO: application icons
+
   const chartData = mapSessionTimeSpentData(currentSession.timePerApp);
 
   return (
-    <Box width="100%" height="100%" margin="50px">
-      <BarChart
-        title="Time spend in application"
-        width={1000}
-        height={500}
-        data={chartData}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
+    <ResponsiveContainer width="100%" aspect={4}>
+      <BarChart title="Time spent in application" data={chartData}>
+        <CartesianGrid strokeDasharray="3 4" />
         <Tooltip />
         <XAxis dataKey="name" />
-        <YAxis />
-        <Bar dataKey="time spent" label>
+        <YAxis padding={{ top: 20 }}>
+          <Label
+            value="Time spent (ms)"
+            position="insideTop"
+            dy={-7}
+            dx={30}
+            fill="black"
+            fontSize="1.2em"
+          />
+        </YAxis>
+        <Bar dataKey="time spent">
           {chartData?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={colors[index]}></Cell>
           ))}
         </Bar>
       </BarChart>
-    </Box>
+    </ResponsiveContainer>
   );
 }
 

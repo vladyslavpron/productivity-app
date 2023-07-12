@@ -45,13 +45,12 @@ function App() {
 
   // TODO: Layout
   // TODO: refactoring
-  // TODO: use tailwind insead of MUI
 
   //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
   // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
   // TODO: list/table of events with all events, but implement virtual scroll for performance since sometimes there are a lot of em
   return (
-    <Paper sx={{ width: "100vh", height: "100vh" }}>
+    <Paper className="md:container md:mx-auto">
       <Navbar />
       {currentSession.totalTimeInApps && (
         <>
@@ -68,6 +67,9 @@ function App() {
               Total time in application: {currentSession.totalTimeInApps}
             </Typography>
           </Box>
+          <Typography textAlign="center" fontSize="2rem">
+            Time spent in applications:
+          </Typography>
           <TimeSpentBarChart />
         </>
       )}
