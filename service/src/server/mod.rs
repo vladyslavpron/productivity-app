@@ -11,8 +11,8 @@ use std::{
 use crate::entity::*;
 use rocket::{serde::json::Json, State};
 use sea_orm::{
-    sea_query::{Expr, Query},
-    ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Select,
+    sea_query::Query, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait, QueryFilter,
+    Select,
 };
 
 extern crate rocket;
