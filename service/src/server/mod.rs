@@ -11,8 +11,8 @@ use std::{
 use crate::entity::*;
 use rocket::{serde::json::Json, State};
 use sea_orm::{
-    sea_query::Query, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait, QueryFilter,
-    Select,
+    prelude::DateTimeUtc, sea_query::Query, ColumnTrait, Condition, DatabaseConnection, DbErr,
+    EntityTrait, QueryFilter, Select,
 };
 
 extern crate rocket;
@@ -98,11 +98,36 @@ pub async fn get_current_session_statistics(
         return Err(NotFound("No events found for current session".to_owned()));
     };
 
-    let mut time_per_app: HashMap<String, u32> = HashMap::new();
-
     let total_time_in_apps = events.last().unwrap().offset - events.first().unwrap().offset;
 
     let avg_time_in_app = total_time_in_apps / (events.len() as u32);
+
+    let time_per_app = calculate_session_apps_time(events);
+
+    let app_visited_entries = calculate_visited_app_entries(events);
+
+    // TODO: aggregate events, create "OPEN" and "CLOSED" attributes, last event that has no "CLOSED" is currently open application
+
+    Ok(Json(SessionStatisticsResponse {
+        session: session.clone(),
+        time_per_app,
+        avg_time_in_app,
+        total_time_in_apps,
+        app_visited_entries,
+    }))
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct AppVisitEntry {
+    start: DateTimeUtc,
+    finish: Option<DateTimeUtc>,
+    duration: u32,
+    app_title: String,
+}
+
+fn calculate_session_apps_time(events: &Vec<event::Model>) -> Vec<(String, u32)> {
+    let mut time_per_app: HashMap<String, u32> = HashMap::new();
 
     let mut prev_offset = 0;
     let mut prev_app = String::from("");
@@ -128,12 +153,33 @@ pub async fn get_current_session_statistics(
 
     time_per_app.sort_by(|a, b| b.1.cmp(&a.1));
 
-    Ok(Json(SessionStatisticsResponse {
-        session: session.clone(),
-        time_per_app,
-        avg_time_in_app,
-        total_time_in_apps,
-    }))
+    time_per_app
+}
+
+fn calculate_visited_app_entries(events: &Vec<event::Model>) -> Vec<AppVisitEntry> {
+    let mut app_visited_entries: Vec<AppVisitEntry> = vec![];
+    for window in events.windows(2) {
+        // start and finish might be the same app after alt+tab or smth, need to distinguish that somehow
+        let start = window.first().unwrap();
+        let finish = window.last().unwrap();
+
+        app_visited_entries.push(AppVisitEntry {
+            start: start.timestamp,
+            finish: Some(finish.timestamp),
+            duration: (finish.timestamp - start.timestamp).num_milliseconds() as u32,
+            app_title: start.app_title.clone(),
+        });
+    }
+
+    let last_event = events.last().unwrap();
+    app_visited_entries.push(AppVisitEntry {
+        start: last_event.timestamp,
+        finish: None,
+        duration: 0,
+        app_title: last_event.app_title.clone(),
+    });
+
+    app_visited_entries
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -141,6 +187,7 @@ pub async fn get_current_session_statistics(
 pub struct SessionStatisticsResponse {
     session: session::Model,
     time_per_app: Vec<(String, u32)>,
+    app_visited_entries: Vec<AppVisitEntry>,
     avg_time_in_app: u32,
     total_time_in_apps: u32,
 }

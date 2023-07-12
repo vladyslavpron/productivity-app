@@ -6,6 +6,7 @@ export interface CurrentSessionState {
   timePerApp: [string, number][];
   avgTimeInApp: number;
   totalTimeInApps: number;
+  appVisitedEntries: AppVisitedEntries[];
 }
 
 const initialState: CurrentSessionState = {
@@ -13,6 +14,7 @@ const initialState: CurrentSessionState = {
   timePerApp: [],
   avgTimeInApp: 0,
   totalTimeInApps: 0,
+  appVisitedEntries: [],
 };
 
 export const currentSessionSlice = createSlice({
@@ -24,6 +26,7 @@ export const currentSessionSlice = createSlice({
       state.timePerApp = action.payload.time_per_app;
       state.avgTimeInApp = action.payload.avg_time_in_app;
       state.totalTimeInApps = action.payload.total_time_in_apps;
+      state.appVisitedEntries = action.payload.app_visited_entries;
     },
   },
 });
@@ -42,4 +45,12 @@ export interface SessionStats {
   time_per_app: [string, number][];
   avg_time_in_app: number;
   total_time_in_apps: number;
+  app_visited_entries: AppVisitedEntries[];
+}
+
+export interface AppVisitedEntries {
+  start: string;
+  finish: string | null;
+  duration: number;
+  app_title: string;
 }

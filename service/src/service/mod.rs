@@ -38,6 +38,10 @@ pub struct Service {
     session: session::Model,
 }
 
+// TODO: but still store plain events!
+// TODO: change events storing by creating database records with attributes like: "OPEN": (date) and "CLOSED": (date). On events update or insert records.
+// TODO: on upper task done, maybe setup tracking reasons for opening or closing, such as opening/closing application or just tabbing out
+
 impl Service {
     pub async fn new(db: DatabaseConnection) -> Self {
         let (tx, cx) = Self::setup_channel();

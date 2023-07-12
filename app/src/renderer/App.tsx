@@ -19,7 +19,6 @@ function App() {
       "http://localhost:8000/api/session/current/events"
     );
     const events = (await response.json()) as Event[];
-    console.log(events);
     setEvents(events);
   }
 
@@ -29,6 +28,7 @@ function App() {
     );
 
     const sessionStats = (await response.json()) as SessionStats;
+    console.log(sessionStats);
 
     dispatch(set(sessionStats));
   }
@@ -51,6 +51,11 @@ function App() {
   //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
   // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
   // TODO: list/table of events with all events, but implement virtual scroll for performance since sometimes there are a lot of em
+
+  const currentApplication =
+    currentSession.appVisitedEntries[
+      currentSession.appVisitedEntries.length - 1
+    ]?.app_title;
   return (
     <Paper className="md:container md:mx-auto">
       <Navbar />
@@ -68,6 +73,7 @@ function App() {
             <Typography>
               Total time in application: {currentSession.totalTimeInApps}
             </Typography>
+            <Typography>Current application: {currentApplication}</Typography>
           </Box>
           <Typography textAlign="center" fontSize="2rem">
             Time spent in applications:
