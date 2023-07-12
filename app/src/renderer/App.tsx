@@ -13,16 +13,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { SessionStats, set } from "./store/currentSessionSlice";
 import Navbar from "./components/Navbar";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#F5D8D6",
-      dark: "#32320C",
-      light: "#F3F33F",
-    },
-  },
-});
-
 function App() {
   async function fetchEvents() {
     const response = await fetch("http://localhost:8000/api/event");
@@ -55,35 +45,33 @@ function App() {
 
   // TODO: Layout
   // TODO: refactoring
+  // TODO: use tailwind insead of MUI
 
   //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
   // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
   // TODO: list/table of events with all events, but implement virtual scroll for performance since sometimes there are a lot of em
   return (
-    <ThemeProvider theme={theme}>
-      <Paper sx={{ width: "100vh", height: "100vh" }}>
-        <Navbar />
-        {currentSession.totalTimeInApps && (
-          <>
-            <Box>
-              <Typography>Total app switches today: {events.length}</Typography>
-              <Typography>
-                Total applications used today:{" "}
-                {currentSession.timePerApp.length}
-              </Typography>
-              <Typography>
-                Average consecutive time in application:
-                {currentSession.avgTimeInApp}
-              </Typography>
-              <Typography>
-                Total time in application: {currentSession.totalTimeInApps}
-              </Typography>
-            </Box>
-            <TimeSpentBarChart />
-          </>
-        )}
-      </Paper>
-    </ThemeProvider>
+    <Paper sx={{ width: "100vh", height: "100vh" }}>
+      <Navbar />
+      {currentSession.totalTimeInApps && (
+        <>
+          <Box>
+            <Typography>Total app switches today: {events.length}</Typography>
+            <Typography>
+              Total applications used today: {currentSession.timePerApp.length}
+            </Typography>
+            <Typography>
+              Average consecutive time in application:
+              {currentSession.avgTimeInApp}
+            </Typography>
+            <Typography>
+              Total time in application: {currentSession.totalTimeInApps}
+            </Typography>
+          </Box>
+          <TimeSpentBarChart />
+        </>
+      )}
+    </Paper>
   );
 }
 
