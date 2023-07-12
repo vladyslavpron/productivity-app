@@ -44,7 +44,8 @@ async fn main() -> Result<(), rocket::Error> {
             routes![
                 server::get_events,
                 server::get_current_session,
-                server::get_current_session_statistics
+                server::get_current_session_statistics,
+                server::get_current_session_events
             ],
         )
         .launch();

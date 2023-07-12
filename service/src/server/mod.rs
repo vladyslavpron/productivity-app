@@ -11,8 +11,8 @@ use std::{
 use crate::entity::*;
 use rocket::{serde::json::Json, State};
 use sea_orm::{
-    sea_query::Query, ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait, QueryFilter,
-    Select,
+    sea_query::{Expr, Query},
+    ColumnTrait, Condition, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Select,
 };
 
 extern crate rocket;
@@ -54,6 +54,28 @@ pub async fn get_current_session(db: &State<DatabaseConnection>) -> Json<session
     );
 
     Json(session)
+}
+
+#[get("/session/current/events")]
+pub async fn get_current_session_events(db: &State<DatabaseConnection>) -> Json<Vec<event::Model>> {
+    info!("GET /service/current/events hit");
+
+    let db = db as &DatabaseConnection;
+
+    let session = current_session(&db).await.unwrap();
+
+    let events = event::Entity::find()
+        .filter(event::Column::SessionId.eq(session.id))
+        .all(db)
+        .await
+        .unwrap();
+
+    info!(
+        "Returning {} events from GET /service/current/events",
+        events.len()
+    );
+
+    Json(events)
 }
 
 #[get("/session/current/statistics")]

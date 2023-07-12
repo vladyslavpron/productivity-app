@@ -15,9 +15,11 @@ import Navbar from "./components/Navbar";
 
 function App() {
   async function fetchEvents() {
-    const response = await fetch("http://localhost:8000/api/event");
+    const response = await fetch(
+      "http://localhost:8000/api/session/current/events"
+    );
     const events = (await response.json()) as Event[];
-
+    console.log(events);
     setEvents(events);
   }
 
