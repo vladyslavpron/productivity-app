@@ -106,8 +106,6 @@ pub async fn get_current_session_statistics(
 
     let app_visited_entries = calculate_visited_app_entries(events);
 
-    // TODO: aggregate events, create "OPEN" and "CLOSED" attributes, last event that has no "CLOSED" is currently open application
-
     Ok(Json(SessionStatisticsResponse {
         session: session.clone(),
         time_per_app,

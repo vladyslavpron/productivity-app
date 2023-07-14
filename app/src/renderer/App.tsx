@@ -12,6 +12,7 @@ import { RootState } from "./store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { SessionStats, set } from "./store/currentSessionSlice";
 import Navbar from "./components/Navbar";
+import Timeline from "./components/Timeline";
 
 function App() {
   async function fetchEvents() {
@@ -48,8 +49,6 @@ function App() {
   // TODO: Layout
   // TODO: refactoring
 
-  //  TODO: guess timeline should be done with divs, since it for some reason doesnt really works with charts.
-  // Then there will be way too many divs, it will become laggy for sure. I guess need to use the same approach as before, displaying N biggest entries, and smaller ones with "others" title
   // TODO: list/table of events with all events, but implement virtual scroll for performance since sometimes there are a lot of em
 
   const currentApplication =
@@ -79,6 +78,7 @@ function App() {
             Time spent in applications:
           </Typography>
           <TimeSpentBarChart />
+          <Timeline />
         </>
       )}
     </Paper>

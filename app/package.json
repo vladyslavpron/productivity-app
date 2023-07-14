@@ -54,6 +54,7 @@
     "html-webpack-plugin": "^5.5.3",
     "path-browserify": "^1.0.1",
     "react-dom": "^18.2.0",
+    "react-google-charts": "^4.0.0",
     "react-redux": "^8.1.1",
     "recharts": "^2.7.2"
   }
